@@ -6,19 +6,19 @@ package lab9;
 public class BusinessTrip extends FieldParser{
     private float cost;
     private String country;
-    private int duration;
+    private float duration;
 
     public void putDuration(StringBuilder sejmSource, int j){
-        this.duration = getIntFromField(sejmSource,"liczba_dni",j);
+        this.duration = getFloatFromField(sejmSource,"\"liczba_dni\"",j);
     }
     public void putCost(StringBuilder sejmSource, int j){
-        this.cost = getIntFromField(sejmSource,"koszt_suma",j);
+        this.cost = getFloatFromField(sejmSource,"\"koszt_suma\"",j);
     }
     public void putCountry(StringBuilder sejmSource, int j){
-        this.country = getStringFromField("kraj",sejmSource,j);
+        this.country = getStringFromField("\"kraj\"",sejmSource,j);
     }
 
-    public int getDuration(){
+    public float getDuration(){
         return this.duration;
     }
     public String getCountry(){

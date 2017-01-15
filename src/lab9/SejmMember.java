@@ -13,27 +13,30 @@ public class SejmMember extends FieldParser{
     private int tripAmount;
 
     public void putFirstnameAndLastname(int j, StringBuilder sejmSource){
-        this.firstnameAndLastname = getStringFromField("ludzie.nazwa", sejmSource, j);
+        this.firstnameAndLastname = getStringFromField("\"ludzie.nazwa\"", sejmSource, j);
     }
 
     public void putId(int j, StringBuilder sejmSource) {
-        this.id = getStringFromField("poslowie.id", sejmSource, j);
+        this.id = getStringFromField("\"poslowie.id\"", sejmSource, j);
     }
 
     public void putExpenses(int j, StringBuilder sejmSource) {
-            this.expenses.putExpenses(j,sejmSource);
+            this.expenses = new Expenses();
+            this.expenses.putSumAndOtherExpenses(j,sejmSource);
     }
 
     public void putBusinessTrips(int j, StringBuilder sejmSource){
         int i=0;
-        while(j < sejmSource.length()){
-            if(sejmSource.substring(j,j+5).equals("kraj")){
-                businessTrips.add(new BusinessTrip());
-                businessTrips.get(i).putCountry(sejmSource,j);
-                businessTrips.get(i).putCost(sejmSource, j);
-                businessTrips.get(i).putDuration(sejmSource, j);
+        this.businessTrips = new ArrayList<>();
+        while(j + 6  < sejmSource.length()){
+            if(sejmSource.substring(j,j+6).equals("\"kraj\"")){
+                this.businessTrips.add(new BusinessTrip());
+                this.businessTrips.get(i).putCountry(sejmSource,j);
+                this.businessTrips.get(i).putCost(sejmSource, j);
+                this.businessTrips.get(i).putDuration(sejmSource, j);
                 i++;
             }
+            j++;
         }
         this.tripAmount = i;
     }
@@ -47,13 +50,17 @@ public class SejmMember extends FieldParser{
     }
 
     public float getExpenses(String expenseCategory){
-        if(expenseCategory == "eoror")
+        if(expenseCategory.equals("eoror"))
             return this.expenses.getExpenseOfRepairOrRenovation();
         else
-        if(expenseCategory == "sum")
+        if(expenseCategory.equals("sum"))
             return this.expenses.getSumOfExpenses();
         else
             throw new IllegalArgumentException("Wrong expense category!");
+    }
+
+    public ArrayList<BusinessTrip> getBusinessTrips(){
+        return this.businessTrips;
     }
 
     public int getBusinsessTripsDurationSum(){
@@ -72,10 +79,14 @@ public class SejmMember extends FieldParser{
     }
 
     public String getBusinessTripCountry(int i){
-        return this.businessTrips.get(i).getCountry();
+        if(!this.businessTrips.isEmpty()){
+            return this.businessTrips.get(i).getCountry();
+        }
+        else
+            return "No country!";
     }
 
-    public int getBusinessTripDuration(int i){
+    public float getBusinessTripDuration(int i){
         return this.businessTrips.get(i).getDuration();
     }
 
