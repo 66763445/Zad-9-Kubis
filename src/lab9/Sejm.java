@@ -27,7 +27,7 @@ public class Sejm extends FieldParser{
         this.sejmMembers = new ArrayList<>();
         j = 0;
         int k = 1, o = 0;
-        System.out.print("Loading sejm members: \n[");
+        System.out.print("-Loading sejm members: \n[");
         int l = 2;
         while(k != 0){
             if(nextUrl.equals(lastUrl))
@@ -56,7 +56,7 @@ public class Sejm extends FieldParser{
         }
         j = 0;
         l = 1;
-        System.out.print("] \n Loading expenses and business trips: \n[");
+        System.out.print("] \n-Loading expenses and business trips:\n[");
         for(SejmMember member : sejmMembers){
             json = readJsonFromUrl("https://api-v3.mojepanstwo.pl/dane/poslowie/" + member.getId() +".json?layers[]=wyjazdy&layers[]=wydatki");
             sejmSource = new StringBuilder(json.toString());
